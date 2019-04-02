@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.chs.smartupdate.utils.IntentUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -51,6 +54,8 @@ public class UpdateManager {
     private volatile boolean isRunning;
     private volatile int notifyFlag = FLAG_NOTIFY_FOREGROUND;   // 0：前台通知下载，1：后台下载
     private int mAppVersionCode;
+    private Activity mActivity;
+    private String mApkPath;
 
 
     public int getNotifyFlag() {
@@ -163,6 +168,8 @@ public class UpdateManager {
 
         if (mConfig.isOnlyWifi() && !SystemUtils.isWifi(activity))
             return;
+
+        mActivity = activity;
 
         mAppVersionCode = SystemUtils.getAppVersionCode(activity);
         mActivityTarget = new WeakReference<>(activity);
@@ -294,6 +301,24 @@ public class UpdateManager {
         Intent intent = new Intent(context, UpdateService.class);
         intent.putExtra(UpdateService.INTENT_ACTION, UpdateService.ACTION_CACEL);
         context.startService(intent);
+    }
+
+    public String getApkPath() {
+        return mApkPath;
+    }
+
+    public void installApk(String apkPath) {
+        mApkPath = apkPath;
+        IntentUtils.installApk(mActivity, apkPath);
+    }
+
+    public void testStartActivity(Activity context) {
+        android.util.Log.d("huasong", "testStartActivity");
+        Uri packageURI = Uri.parse("package:" + context.getPackageName());
+        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageURI);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        android.util.Log.d("huasong", "testStartActivity startActivityForResult");
+        ((Activity) context).startActivityForResult(intent, IntentUtils.INSTALL_PERMISS_CODE);
     }
 
     /**

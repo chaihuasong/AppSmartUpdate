@@ -6,7 +6,7 @@ import android.util.Log;
 import com.chs.smartupdate.UpdateManager;
 
 public class TraceUtil {
-    public static final String TAG = "com.lwy.smartupdate";
+    public static final String TAG = "com.chs.smartupdate";
 
     public static void d(String msg) {
         if (UpdateManager.getConfig().isDebug())

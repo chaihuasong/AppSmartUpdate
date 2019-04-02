@@ -246,7 +246,8 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
             notifyMsg("温馨提醒", "点击安装", 100, getInstallIntent(apkPath)); // 可说是多余的一步
         }
         mNotificationManager.cancel(NOTIFY_ID);
-        IntentUtils.installApk(UpdateService.this, apkPath);
+        //IntentUtils.installApk(UpdateService.this, apkPath);
+        UpdateManager.getInstance().installApk(apkPath);
         stopSelf();
     }
 
