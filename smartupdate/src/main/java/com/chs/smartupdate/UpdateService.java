@@ -28,6 +28,7 @@ import com.chs.smartupdate.utils.TraceUtil;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.chs.smartupdate.UpdateManager.FLAG_NOTIFY_FOREGROUND;
@@ -127,11 +128,14 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
             appUploadTask = new FullAppUpdateTask(mAppUpdateModel);
         } else {
             HashMap<String, AppUpdateModel.PatchInfoModel> patchMap = mAppUpdateModel.getPatchInfoMap();
-            for (Map.Entry<String, AppUpdateModel.PatchInfoModel> entry : patchMap.entrySet()) {
+            Iterator iterator = patchMap.entrySet().iterator();
+            while(iterator.hasNext()){
+                Map.Entry<String, AppUpdateModel.PatchInfoModel> entry = (Map.Entry<String, AppUpdateModel.PatchInfoModel>)iterator.next();
                 String key = entry.getKey();
                 int patchVersion = Integer.parseInt(key.substring(1, key.length()));
-                if (patchVersion < mCurrentVersion)
-                    patchMap.remove(key);
+                if (patchVersion < mCurrentVersion) {
+                    iterator.remove();
+                }
             }
             appUploadTask = new PatchAppUploadTask(this, mCurrentVersion, mAppUpdateModel.getNewVersion(),
                     mAppUpdateModel.getPatchInfoMap());
@@ -214,8 +218,8 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
     /*           分割线                */
     @Override
     public void onProgress(int percent, long totalLength, int patchIndex, int patchCount) {
-        if (mLastPercent != percent && percent % 10 == 0) {
-            //避免频繁刷新View，这里设置每下载10%提醒更新一次进度
+        if (mLastPercent != percent && percent % 5 == 0) {
+            //避免频繁刷新View，这里设置每下载5%提醒更新一次进度
             mLastPercent = percent;
 //            TraceUtil.d(String.format(Locale.CHINA, "onProgress-> percent:%d,totalLength:%d,patchIndex:%d,patchCount:%d ",
 //                    percent, totalLength, patchIndex, patchCount));
