@@ -108,6 +108,10 @@ public class PatchAppUploadTask extends AppUpdateTask {
             // TODO: 2018/8/30 检查本地安装的apk的md5是否正常 --防止本地apk被篡改了
 
             String oldApkSource = ApkUtils.getSourceApkPath(mContext, mContext.getPackageName());
+            // 解决多个版本无法连续升级问题
+            if (mCurrentPatchIndex > 1) {
+                oldApkSource = dirPath + mCurrentVersion + ".apk";
+            }
 
             if (!TextUtils.isEmpty(oldApkSource)) {
 
