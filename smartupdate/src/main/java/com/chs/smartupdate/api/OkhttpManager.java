@@ -173,7 +173,7 @@ public class OkhttpManager implements IHttpManager {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.code() == 200) {
-                    long totalLength = HttpHeaders.contentLength(response);
+                    long totalLength = response.body().contentLength();
                     InputStream is = response.body().byteStream();
                     File dir = new File(path);
                     if (!dir.exists())
