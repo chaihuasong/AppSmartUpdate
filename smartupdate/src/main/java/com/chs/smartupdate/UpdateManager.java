@@ -11,6 +11,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.chs.smartupdate.api.ICheckVersionCallback;
 import com.chs.smartupdate.utils.IntentUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,6 +50,7 @@ public class UpdateManager {
     private WeakReference<UpdateDialog> mUpdateDialogTarget;
     private String mUpdateInfoUrl;
     private Set<IUpdateCallback> mListener = new CopyOnWriteArraySet<>();
+    private Set<ICheckVersionCallback> mCheckVersionListener = new CopyOnWriteArraySet<>();
 
     private AppUpdateModel mAppUpdateModel;
     private volatile boolean isRunning;
@@ -444,6 +446,82 @@ public class UpdateManager {
                 isRunning = false;
             }
         });
+    }
+
+
+    /**
+     * 是否有更新
+     *
+     * @param activity
+     * @param updateInfoUrl 自动更新的清单文件url地址
+     * @param callback      更新情况反馈的回调接口,需要回调则传入并自行做相应动作,可不传
+     */
+    public void checkVersion(Activity activity, String updateInfoUrl, final ICheckVersionCallback callback) {
+        if (mConfig == null)
+            throw new RuntimeException("you should initialize Config first");
+
+        if (mConfig.isOnlyWifi() && !SystemUtils.isWifi(activity))
+            return;
+
+        mActivity = activity;
+
+        mAppVersionCode = SystemUtils.getAppVersionCode(activity);
+        mActivityTarget = new WeakReference<>(activity);
+        mUpdateInfoUrl = updateInfoUrl;
+
+        if (mDispatcher == null)
+            mDispatcher = new Dispatcher();
+
+        if (callback != null && !mCheckVersionListener.contains(callback))
+            mCheckVersionListener.add(callback);
+        if (TextUtils.isEmpty(mUpdateInfoUrl))
+            throw new IllegalArgumentException("updateInfoUrl can't be empty!");
+        if (isRunning) {
+            TraceUtil.i("the updating task is running now");
+            return;
+        }
+        getHttpManager().asyncGet(mUpdateInfoUrl, null, new IHttpManager.Callback() {
+            @Override
+            public void onRequest(IRequest request) {
+
+            }
+
+            @Override
+            public void onResponse(String result) {
+                JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject().get("patchInfo").getAsJsonObject();
+                Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+                mAppUpdateModel = gson.fromJson(result, AppUpdateModel.class);
+
+                HashMap<String, AppUpdateModel.PatchInfoModel> map;
+                mAppUpdateModel.setPatchInfoMap((HashMap<String, AppUpdateModel.PatchInfoModel>)
+                        gson.fromJson(jsonObject.toString(), new TypeToken<HashMap<String, AppUpdateModel.PatchInfoModel>>() {
+                        }.getType()));
+                mDispatcher.dispatch(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkVersion(mAppUpdateModel);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(final String error) {
+                // ignore
+            }
+        });
+    }
+
+    private void checkVersion(AppUpdateModel appUpdateModel) {
+        int newestVersion = appUpdateModel.getNewVersion();
+        if (mAppVersionCode < newestVersion) {
+            onVersionAvaliable();
+        }
+    }
+
+    private void onVersionAvaliable() {
+        for (ICheckVersionCallback checkVersionCallback : UpdateManager.getInstance().mCheckVersionListener) {
+            checkVersionCallback.onNewVersionVisiable();
+        }
     }
 
 }
