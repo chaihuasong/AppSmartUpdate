@@ -299,7 +299,7 @@ public class UpdateManager {
                 }
             });
         }
-        updateDialog.setUpdateTitle(String.format(Locale.CHINA, "是否升级到v%s版本?", mAppUpdateModel.getNewVersion()));
+        updateDialog.setUpdateTitle(String.format(Locale.CHINA, "是否升级到v%s版本?", mAppUpdateModel.getNewVersionName()));
         updateDialog.setText(tip);
         updateDialog.show();
 

@@ -29,6 +29,16 @@ public class AppUpdateModel {
     private int minVersion;
     private int minAllowPatchVersion;
     private int newVersion;
+
+    public String getNewVersionName() {
+        return newVersionName;
+    }
+
+    public void setNewVersionName(String newVersionName) {
+        this.newVersionName = newVersionName;
+    }
+
+    private String newVersionName;
     private String tip;
     private long size;
     private String apkURL;
