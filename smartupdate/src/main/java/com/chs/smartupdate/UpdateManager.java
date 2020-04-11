@@ -262,7 +262,13 @@ public class UpdateManager {
 
             @Override
             public void onOK(View view) {
-                mUpdateDialogTarget.get().setOKBtnVisible(View.GONE);
+                if (isRunning) {
+                    mUpdateDialogTarget.get().dismiss();
+                    sendCancel2Service(mActivity);
+                    cancelUpdate();
+                    return;
+                }
+                mUpdateDialogTarget.get().setOKBtnText("取消更新");
                 mUpdateDialogTarget.get().showProgressBar(true);
                 mUpdateDialogTarget.get().showIgnoreTextView(false);
                 startUpdate(0, method);
@@ -407,7 +413,7 @@ public class UpdateManager {
                 }
                 if (mActivityTarget.get() != null) {
                     mUpdateDialogTarget.get().setProgress(percent);
-                    mUpdateDialogTarget.get().setText(tip);
+                    mUpdateDialogTarget.get().setUpdateTitle(tip);
                 }
                 for (IUpdateCallback iUpdateCallback : UpdateManager.getInstance().mListener) {
                     iUpdateCallback.onProgress(percent, totalLength, patchIndex, patchCount);
