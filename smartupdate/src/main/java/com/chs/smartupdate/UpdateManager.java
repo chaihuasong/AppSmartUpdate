@@ -186,8 +186,10 @@ public class UpdateManager {
             throw new IllegalArgumentException("updateInfoUrl can't be empty!");
         if (isRunning) {
             TraceUtil.i("the updating task is running now");
+            ToastUtil.toast(mActivityTarget.get(), "正在下载中，请在通知栏查看进度...");
             return;
         }
+        notifyFlag = FLAG_NOTIFY_FOREGROUND;
         getHttpManager().asyncGet(mUpdateInfoUrl, null, new IHttpManager.Callback() {
             @Override
             public void onRequest(IRequest request) {
@@ -260,7 +262,7 @@ public class UpdateManager {
 
             @Override
             public void onOK(View view) {
-                mUpdateDialogTarget.get().setOKBtnEnable(false);
+                mUpdateDialogTarget.get().setOKBtnVisible(View.GONE);
                 mUpdateDialogTarget.get().showProgressBar(true);
                 mUpdateDialogTarget.get().showIgnoreTextView(false);
                 startUpdate(0, method);
@@ -310,6 +312,7 @@ public class UpdateManager {
     }
 
     public void installApk(String apkPath) {
+        isRunning = false;
         mApkPath = apkPath;
         IntentUtils.installApk(mActivity, apkPath);
     }
@@ -332,7 +335,7 @@ public class UpdateManager {
         intent.putExtra(UpdateService.INTENT_ACTION, UpdateService.ACTION_UPDATE);
         intent.putExtra(UpdateService.PARAM_SHOWFLAG, showFlag);
         intent.putExtra(UpdateService.PARAM_UPDATEMETHODFLAG, method);
-        intent.putExtra(UpdateService.PARAM_ICONRES, android.R.drawable.btn_star);
+        intent.putExtra(UpdateService.PARAM_ICONRES, R.mipmap.htz_round);
 //        intent.putExtra(UPDATE_PARAM_MODEL, mAppUpdateModel);
         mActivityTarget.get().startService(intent);
     }

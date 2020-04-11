@@ -16,13 +16,11 @@ import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.chs.smartupdate.R;
 import com.chs.smartupdate.data.AppUpdateModel;
 import com.chs.smartupdate.task.FullAppUpdateTask;
 import com.chs.smartupdate.task.IAppUploadTask;
 import com.chs.smartupdate.task.PatchAppUploadTask;
 import com.chs.smartupdate.utils.FileUtils;
-import com.chs.smartupdate.utils.IntentUtils;
 import com.chs.smartupdate.utils.SystemUtils;
 import com.chs.smartupdate.utils.TraceUtil;
 
@@ -80,7 +78,8 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
         mNotificationManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            mNotificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+            mNotificationChannel.setSound(null, null);
             mNotificationManager.createNotificationChannel(mNotificationChannel);
         }
     }
@@ -154,7 +153,12 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
     }
 
     private void notifyMsg(String title, String content, int progress, PendingIntent pIntent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, mNotificationChannel.getId());//为了向下兼容，这里采用了v7包下的NotificationCompat来构造
+        NotificationCompat.Builder builder = null;//为了向下兼容，这里采用了v7包下的NotificationCompat来构造
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            builder = new NotificationCompat.Builder(this, mNotificationChannel.getId());
+        } else {
+            builder = new NotificationCompat.Builder(this);
+        }
         builder.setSmallIcon(mIconRes).setLargeIcon(BitmapFactory.decodeResource(getResources(), mIconRes)).setContentTitle(title);
         if (progress > 0 && progress < 100) {
             //下载进行中
@@ -175,6 +179,7 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
             builder.setContentText(content);
         }
         builder.setOngoing(true);
+        builder.setSound(null);
         if (pIntent != null) {
             //下载完成
             builder.setContentIntent(pIntent);
@@ -218,12 +223,8 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
     /*           分割线                */
     @Override
     public void onProgress(int percent, long totalLength, int patchIndex, int patchCount) {
-        if (mLastPercent != percent && percent % 5 == 0) {
-            //避免频繁刷新View，这里设置每下载5%提醒更新一次进度
+        if (mLastPercent != percent) {
             mLastPercent = percent;
-//            TraceUtil.d(String.format(Locale.CHINA, "onProgress-> percent:%d,totalLength:%d,patchIndex:%d,patchCount:%d ",
-//                    percent, totalLength, patchIndex, patchCount));
-
             if (UpdateManager.getInstance().getNotifyFlag() == FLAG_NOTIFY_FOREGROUND) {
                 UpdateManager.getInstance().onProgress(percent, totalLength, patchIndex, patchCount);
             } else {

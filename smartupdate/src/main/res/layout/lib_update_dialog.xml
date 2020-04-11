@@ -60,6 +60,7 @@
                 android:gravity="center"
                 android:minHeight="40dp"
                 android:text="升级"
+                android:background="@drawable/button_selector"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/textTitle"/>
 

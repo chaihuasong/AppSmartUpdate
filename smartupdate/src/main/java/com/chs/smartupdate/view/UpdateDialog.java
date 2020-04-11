@@ -124,6 +124,10 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
         mOKBtn.setEnabled(enable);
     }
 
+    public void setOKBtnVisible(int visible) {
+        mOKBtn.setVisibility(visible);
+    }
+
     @Override
     public void onClick(View v) {
         int i = v.getId();

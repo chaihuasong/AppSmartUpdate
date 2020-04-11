@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AppSmartUpdate.iml" filepath="$PROJECT_DIR$/AppSmartUpdate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AppSmartUpdate.iml" filepath="$PROJECT_DIR$/AppSmartUpdate.iml" group="AppSmartUpdate" />
       <module fileurl="file://$PROJECT_DIR$/app/AppSmartUpdate-app.iml" filepath="$PROJECT_DIR$/app/AppSmartUpdate-app.iml" group="AppSmartUpdate/app" />
       <module fileurl="file://$PROJECT_DIR$/smartupdate/AppSmartUpdate-smartupdate.iml" filepath="$PROJECT_DIR$/smartupdate/AppSmartUpdate-smartupdate.iml" group="AppSmartUpdate/smartupdate" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/libraries-AppSmartUpdate.iml" filepath="$PROJECT_DIR$/libraries-AppSmartUpdate.iml" group="AppSmartUpdate" />
-      <module fileurl="file://$PROJECT_DIR$/smartupdate/smartupdate.iml" filepath="$PROJECT_DIR$/smartupdate/smartupdate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/libraries-AppSmartUpdate-app.iml" filepath="$PROJECT_DIR$/app/libraries-AppSmartUpdate-app.iml" group="AppSmartUpdate/app" />
+      <module fileurl="file://$PROJECT_DIR$/smartupdate/smartupdate.iml" filepath="$PROJECT_DIR$/smartupdate/smartupdate.iml" group="AppSmartUpdate/smartupdate" />
     </modules>
   </component>
 </project>
