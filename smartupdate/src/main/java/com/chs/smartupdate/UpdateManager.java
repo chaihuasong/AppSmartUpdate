@@ -341,7 +341,7 @@ public class UpdateManager {
         intent.putExtra(UpdateService.INTENT_ACTION, UpdateService.ACTION_UPDATE);
         intent.putExtra(UpdateService.PARAM_SHOWFLAG, showFlag);
         intent.putExtra(UpdateService.PARAM_UPDATEMETHODFLAG, method);
-        intent.putExtra(UpdateService.PARAM_ICONRES, R.mipmap.htz_round);
+        intent.putExtra(UpdateService.PARAM_ICONRES, R.mipmap.htz_tips_round);
 //        intent.putExtra(UPDATE_PARAM_MODEL, mAppUpdateModel);
         mActivityTarget.get().startService(intent);
     }
