@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:id="@+id/iv_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/lib_update_app_top_bg"/>
+            android:src="@mipmap/lib_update_app_top_bg" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,14 +33,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/textTitle"
-                tools:text="是否升级到1.0.1版本？"/>
+                tools:text="是否升级到1.0.1版本？" />
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:paddingBottom="10dp"
                 android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:scrollbars="none">
 
                 <TextView
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/content_text"
                     android:textSize="@dimen/textContentSize"
-                    tools:text="1 xxxxxxxx\n2 xxxxxxxx"/>
+                    tools:text="1 xxxxxxxx\n2 xxxxxxxx" />
             </ScrollView>
 
 
@@ -57,12 +57,11 @@
                 android:id="@+id/ok_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_selector"
                 android:gravity="center"
                 android:minHeight="40dp"
-                android:text="升级"
-                android:background="@drawable/button_selector"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/textTitle"/>
+                android:textSize="@dimen/textTitle" />
 
             <TextView
                 android:id="@+id/ignore_tv"
@@ -73,16 +72,37 @@
                 android:text="忽略此版本"
                 android:textColor="#666"
                 android:textSize="14sp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
-            <com.daimajia.numberprogressbar.NumberProgressBar
-                android:id="@+id/progressbar"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/progressbarLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:visibility="gone"
-                />
+                android:layout_marginVertical="10dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/current"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp" />
+
+
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@+id/progressbar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="2dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -99,14 +119,13 @@
                 android:layout_width="1dp"
                 android:layout_height="50dp"
                 android:background="#d8d8d8"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/close_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/lib_update_app_close"
-                />
+                android:src="@mipmap/lib_update_app_close" />
 
 
         </LinearLayout>

@@ -25,7 +25,10 @@ import com.chs.smartupdate.R;
 public class UpdateDialog extends Dialog implements View.OnClickListener {
     private TextView mUpdateInfoTV;
     private NumberProgressBar mProgressBar;
+    private View mProgressBarLayout;
     private TextView mTitleTV;
+    private TextView mCurrentTV;
+    private TextView mTotalTV;
     private Button mOKBtn;
     private TextView mIgnoreTV;
     private ImageView mCloseIV;
@@ -64,7 +67,10 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
     private void init() {
         View view = View.inflate(getContext(), R.layout.lib_update_dialog, null);
         mProgressBar = (NumberProgressBar) view.findViewById(R.id.progressbar);
+        mProgressBarLayout = (View) view.findViewById(R.id.progressbarLayout);
         mTitleTV = (TextView) view.findViewById(R.id.title_tv);
+        mCurrentTV = (TextView) view.findViewById(R.id.current);
+        mTotalTV = (TextView) view.findViewById(R.id.total);
         mUpdateInfoTV = (TextView) view.findViewById(R.id.update_info_tv);
         mOKBtn = (Button) view.findViewById(R.id.ok_btn);
         mIgnoreTV = (TextView) view.findViewById(R.id.ignore_tv);
@@ -96,6 +102,14 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
         mTitleTV.setText(title);
     }
 
+    public void setCurrent(CharSequence title) {
+        mCurrentTV.setText(title);
+    }
+
+    public void setTotal(CharSequence title) {
+        mTotalTV.setText(title);
+    }
+
     public void showCloseLLT(boolean isShow) {
         mCloseLLT.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
@@ -105,7 +119,7 @@ public class UpdateDialog extends Dialog implements View.OnClickListener {
     }
 
     public void showProgressBar(boolean isShow) {
-        mProgressBar.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        mProgressBarLayout.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     public void setMax(int max) {

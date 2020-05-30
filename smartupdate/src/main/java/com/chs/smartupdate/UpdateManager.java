@@ -28,6 +28,7 @@ import com.chs.smartupdate.utils.TraceUtil;
 import com.chs.smartupdate.view.UpdateDialog;
 
 import java.lang.ref.WeakReference;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
@@ -299,12 +300,23 @@ public class UpdateManager {
                 }
             });
         }
-        updateDialog.setUpdateTitle(String.format(Locale.CHINA, "是否升级到v%s版本?", mAppUpdateModel.getNewVersionName()));
+        updateDialog.setUpdateTitle(String.format(Locale.CHINA, "是否升级到v%s版本?",
+                mAppUpdateModel.getNewVersionName()));
         updateDialog.setText(tip);
+        updateDialog.setOKBtnText(String.format(Locale.CHINA, "升级（%s）",
+                formatFileSize(mAppUpdateModel.getSize())));
         updateDialog.show();
 
         mUpdateDialogTarget = new WeakReference<>(updateDialog);
 
+    }
+    public String formatFileSize(long file) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        String fileSizeString = df.format((double) file / 1048576) + "M";
+        if (file < 1048576) {
+            fileSizeString = "0" + fileSizeString;
+        }
+        return fileSizeString;
     }
 
     private void sendCancel2Service(Context context) {
@@ -418,6 +430,8 @@ public class UpdateManager {
                 for (IUpdateCallback iUpdateCallback : UpdateManager.getInstance().mListener) {
                     iUpdateCallback.onProgress(percent, totalLength, patchIndex, patchCount);
                 }
+                mUpdateDialogTarget.get().setCurrent(formatFileSize(percent * totalLength / 100));
+                mUpdateDialogTarget.get().setTotal(formatFileSize(totalLength));
             }
         });
     }
