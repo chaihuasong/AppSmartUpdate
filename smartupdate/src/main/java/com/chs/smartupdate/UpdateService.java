@@ -205,7 +205,7 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
         } else {
             intent.setDataAndType(Uri.fromFile(appFile), "application/vnd.android.package-archive");
         }
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         return pendingIntent;
     }
 
