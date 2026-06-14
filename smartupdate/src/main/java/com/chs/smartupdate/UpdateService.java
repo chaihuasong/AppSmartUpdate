@@ -62,7 +62,7 @@ public class UpdateService extends Service implements IAppUploadTask.CallBack {
 
     public int updateMethod = -1;   // 0：全量更新，1：增量更新
 
-    private int mIconRes;  // 通知栏提示得图标资源
+    private int mIconRes = R.mipmap.dialog_tip;  // 通知栏提示得图标资源
     private int mCurrentVersion;  // 当前apk版本
 
 
