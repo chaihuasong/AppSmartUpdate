@@ -423,15 +423,18 @@ public class UpdateManager {
                 } else {
                     tip = "正在下载更新中...";
                 }
-                if (mActivityTarget.get() != null) {
-                    mUpdateDialogTarget.get().setProgress(percent);
-                    mUpdateDialogTarget.get().setUpdateTitle(tip);
+                UpdateDialog updateDialog = mUpdateDialogTarget == null
+                        ? null : mUpdateDialogTarget.get();
+                if (mActivityTarget != null && mActivityTarget.get() != null
+                        && updateDialog != null && updateDialog.isShowing()) {
+                    updateDialog.setProgress(percent);
+                    updateDialog.setUpdateTitle(tip);
+                    updateDialog.setCurrent(formatFileSize(percent * totalLength / 100));
+                    updateDialog.setTotal(formatFileSize(totalLength));
                 }
                 for (IUpdateCallback iUpdateCallback : UpdateManager.getInstance().mListener) {
                     iUpdateCallback.onProgress(percent, totalLength, patchIndex, patchCount);
                 }
-                mUpdateDialogTarget.get().setCurrent(formatFileSize(percent * totalLength / 100));
-                mUpdateDialogTarget.get().setTotal(formatFileSize(totalLength));
             }
         });
     }
